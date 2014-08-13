@@ -54,6 +54,10 @@ executable stock-value-prediction
     , vector         == 0.10.*
     , diagrams-cairo
     , diagrams-lib
+    , time           == 1.4.*
+    , old-locale
+    , MonadRandom    == 0.1.*
+    , csv-conduit    == 0.6.*
 
   -- Directories containing source files.
   -- hs-source-dirs:

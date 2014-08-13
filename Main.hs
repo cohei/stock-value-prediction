@@ -1,11 +1,32 @@
 module Main where
 
 import AI.SVM.Simple
+import Control.Monad.Random
+import Data.Time.Format (readTime)
+import Data.Time.Calendar (Day)
 import qualified Data.Vector.Storable as V
-import Diagrams.Prelude
 import Diagrams.Backend.Cairo
 import Diagrams.Backend.Cairo.CmdLine
 import Diagrams.Backend.Cairo.Internal hiding (C)
+import Diagrams.Prelude
+import System.Locale (defaultTimeLocale)
+import Data.CSV.Conduit
+
+learningData = "225.csv"
+
+data DailyChart   = DailyChart { date :: Day, open, close :: Int }
+type TrainingData = [DailyChart]
+type Input        = (DailyChart, DailyChart, DailyChart, DailyChart, DailyChart, Int)
+type Identifier   = Input -> Bool
+
+learn :: TrainingData -> Identifier
+learn = undefined
+
+randomIdentifier :: IO Identifier
+randomIdentifier = const <$> getRandom
+
+readDate :: String -> Day
+readDate = readTime defaultTimeLocale "%-m/%-d/%y"
 
 main = do
   let
