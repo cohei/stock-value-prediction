@@ -5,12 +5,9 @@ import Control.Monad.Random
 import Data.Time.Format (readTime)
 import Data.Time.Calendar (Day)
 import qualified Data.Vector.Storable as V
-import Diagrams.Backend.Cairo
-import Diagrams.Backend.Cairo.CmdLine
-import Diagrams.Backend.Cairo.Internal hiding (C)
-import Diagrams.Prelude
 import System.Locale (defaultTimeLocale)
 import Data.CSV.Conduit
+import Control.Applicative ((<$>))
 
 learningData = "225.csv"
 
@@ -40,24 +37,3 @@ main = do
     (m, svm) = trainClassifier (C 1) (RBF 4) trainingData
 
   print $ classify svm [0.2, 0.8::Double]
-
-  let
-    plot :: Diagram Cairo R2
-    plot =
-      (circle 1 # fc green # scale 5)
-      `atop`
-      (circle 1 # fc green # scale 5 # translateX 200 # translateY 200)
-      `atop`
-      (circle 1 # fc green # scale 5 # translateX 400 # translateY 400)
-      `atop`
-      foldl1 atop [
-        circle 1 # scale 5 # translateX (400 * x) # translateY (400 * y) # fc (color svm (x,y))
-          | x <- [0, 0.025 .. 1], y <- [0, 0.025 .. 1] ]
-
-  fst $ renderDia Cairo (CairoOptions "test.png" (Width 400) PNG True) plot
-
-color svm (x,y) =
-  case classify svm [x,y] of
-    'r' -> red
-    'b' -> blue
-    'i' -> indigo
