@@ -1,39 +1,50 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
 
+import AI.SVM.Base
 import AI.SVM.Simple
-import Control.Monad.Random
-import Data.Time.Format (readTime)
-import Data.Time.Calendar (Day)
-import qualified Data.Vector.Storable as V
-import System.Locale (defaultTimeLocale)
-import Data.CSV.Conduit
 import Control.Applicative ((<$>))
+import Control.Monad.Random
+import Data.Foldable (Foldable)
+import Data.Vector (Vector)
+import qualified Data.Vector as V
+import Control.Monad (liftM)
 
-learningData = "225.csv"
+import DailyChart
+import Input
+import System.Environment (getArgs)
 
-data DailyChart   = DailyChart { date :: Day, open, close :: Int }
+trainingDataFile = "225.csv"
+
 type TrainingData = [DailyChart]
-type Input        = (DailyChart, DailyChart, DailyChart, DailyChart, DailyChart, Int)
-type Identifier   = Input -> Bool
+type Classifier   = Input -> Bool
 
-learn :: TrainingData -> Identifier
-learn = undefined
+toInput :: Vector DailyChart -> [Input]
+toInput = undefined
 
-randomIdentifier :: IO Identifier
-randomIdentifier = const <$> getRandom
+teacher :: [DailyChart] -> (Input, Bool)
+teacher = undefined
 
-readDate :: String -> Day
-readDate = readTime defaultTimeLocale "%-m/%-d/%y"
+train :: TrainingData -> Classifier
+train = undefined
+
+tr :: (Foldable f, SVMVector a) => f (Bool, a) -> (String, SVMClassifier Bool)
+tr = trainClassifier (C 1) (RBF 4)
+
+randomClassifier :: MonadRandom m => m Classifier
+randomClassifier = liftM const getRandom
 
 main = do
-  let
-    trainingData =
-      [ ('r', V.fromList [0,0])
-      , ('r', V.fromList [1,1])
-      , ('b', V.fromList [0,1])
-      , ('b', V.fromList [1,0])
-      , ('i', V.fromList [0.5,0.5::Double])
-      ]
-    (m, svm) = trainClassifier (C 1) (RBF 4) trainingData
+  input <- V.fromList . map read . take 11 <$> getArgs
 
-  print $ classify svm [0.2, 0.8::Double]
+  putStrLn "random"
+  randomClassifier' <- randomClassifier
+  print $ randomClassifier' input
+
+  putStrLn ""
+
+  putStrLn "svm"
+  trainingData <- fromFile trainingDataFile
+  let (str, svm) = tr (makeInputs trainingData)
+  putStr str
+  print $ classify svm input

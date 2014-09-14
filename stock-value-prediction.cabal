@@ -42,7 +42,7 @@ executable stock-value-prediction
   main-is:             Main.hs
 
   -- Modules included in this executable, other than Main.
-  -- other-modules:
+  other-modules: DailyChart
 
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
@@ -50,12 +50,14 @@ executable stock-value-prediction
   -- Other library packages from which modules are imported.
   build-depends:
       base           == 4.7.*
-    , svm-simple
-    , vector         == 0.10.*
-    , time           == 1.4.*
-    , old-locale
-    , MonadRandom    == 0.1.*
+    , MonadRandom
+    , bytestring     >= 0.10.4.0
     , csv-conduit    == 0.6.*
+    , old-locale
+    , svm-simple
+    , time           == 1.4.*
+    , vector         == 0.10.*
+    , cassava        == 0.4.*
 
   -- Directories containing source files.
   -- hs-source-dirs:
