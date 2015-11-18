@@ -49,15 +49,15 @@ executable stock-value-prediction
 
   -- Other library packages from which modules are imported.
   build-depends:
-      base           == 4.7.*
+      base
     , MonadRandom
-    , bytestring     >= 0.10.4.0
-    , csv-conduit    == 0.6.*
+    , bytestring
+    , csv-conduit
     , old-locale
     , svm-simple
-    , time           == 1.4.*
-    , vector         == 0.10.*
-    , cassava        == 0.4.*
+    , time
+    , vector
+    , cassava
 
   -- Directories containing source files.
   -- hs-source-dirs:

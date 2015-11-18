@@ -1,0 +1,8 @@
+flags: {}
+packages:
+- '.'
+extra-deps:
+  - svm-simple-0.2.7.1
+  - bindings-svm-0.2.1
+resolver: lts-3.14
+allow-newer: true # since stack 0.1.7
